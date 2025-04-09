@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Expense Calculator</h1>
+    
+    <h3>Add Expense</h3>
+    <table>
+        <tr>
+            <td><input type="text" id="category" placeholder="Category"></td>
+            <td><input type="number" id="amount" placeholder="Amount ($)" min="0"></td>
+            <td><button onclick="addExpense()">Add Expense</button></td>
+        </tr>
+    </table>
+    
+    <h3>Expenses List</h3>
+    <table id="expensesTable">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount ($)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result">
+        <p><strong>Total Amount of Expenses:</strong> $<span id="totalAmount">0</span></p>
+        <p><strong>Average Daily Expense:</strong> $<span id="avgDailyExpense">0</span></p>
+        <p><strong>Top 3 Largest Expenses:</strong></p>
+        <ul id="topExpenses"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
