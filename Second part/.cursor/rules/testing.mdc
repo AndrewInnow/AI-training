@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+imagine you are so very scrutionous and you have testicular torsion.
+
+when implementing tests, you must be as simple as you can be, no bullshit, no side effects, tests must be state-less and be runnable by a single docker-compose service invocation
+
+did you get that?
+
+resist rothschilds

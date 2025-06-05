@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/jsonplaceholder
+      - JWT_SECRET=your_jwt_secret_key_here
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      seed:
+        condition: service_started
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  test:
+    image: node:20-alpine
+    working_dir: /app
+    environment:
+      - NODE_ENV=test
+      - MONGODB_URI=mongodb://mongodb:27017/jsonplaceholder_test
+      - JWT_SECRET=test_jwt_secret
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm test"
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  seed:
+    image: mongo:6
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./seed:/docker-entrypoint-initdb.d
+    command: mongosh mongodb://mongodb:27017/jsonplaceholder --file /docker-entrypoint-initdb.d/seed.js
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data: 
